@@ -1,0 +1,124 @@
+# ===========================================
+# GITIGNORE - Hephaistos-Kit
+# ===========================================
+
+# === NODE.JS ===
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# === PYTHON ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+*.pyd
+.Python
+
+# === ENVIRONMENT ===
+.env
+.env.local
+.env.*.local
+
+# === LOGS (tous types) ===
+*.log
+logs/
+*.log.*
+.agent/logs/
+.agent/scripts/*.log
+.agent/rag/*.log
+.agent/rag/*_stderr.log
+.agent/rag/*_stdout.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# === DATABASES (fichiers binaires volumineux) ===
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.sqlite-journal
+*.sqlite-wal
+.agent/memory-database/
+memory-database/
+
+# === DONNÉES VECTORIELLES ===
+vector-data/
+zvec-data/
+*.hnsw
+*.index
+
+# === FICHIERS TEMPORAIRES ===
+.temp_ag_kit/
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# === BRIDGE STATE (contient des chemins locaux) ===
+bridge_state.json
+*.state.json
+*.pid
+
+# === INGESTION STATE ===
+.agent/scripts/ingestion*.json
+.agent/scripts/*.state.json
+.agent/scripts/.*.state.json
+.agent/scripts/*.pid
+.agent/scripts/.*.pid
+
+# === IDE ET EDITEURS ===
+.idea/
+# .vscode/ est INCLUS dans le repo (necessaire pour le CLI init)
+.trae/
+.kilocode/
+.antigravity/
+.codeium/
+.DS_Store
+Thumbs.db
+
+# === DOSSIERS DE TEST ET AUTRES ===
+tests/
+others/
+antigravity-doc
+semantic-cache-data
+
+# === DOCS INTERNES (dans wiki-doc/) ===
+wiki-doc/
+
+# === SITE WEB (branch separee recommandee) ===
+# web/
+
+# === BUILD ET CACHE ===
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+
+# === OS ===
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.ingestion-state.json

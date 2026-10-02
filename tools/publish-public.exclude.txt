@@ -1,0 +1,5 @@
+# Fichiers/dossiers presents dans le repo prive mais exclus du snapshot public.
+# Un chemin par ligne, relatif a la racine du kit. Prefixes acceptes.
+PLAN-DE-COHESION.md
+.agent/logs
+web

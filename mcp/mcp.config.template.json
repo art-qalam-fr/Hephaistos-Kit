@@ -1,0 +1,43 @@
+{
+  "_comment": "Template généré par mcp/install.ps1 — les valeurs ${VAR} sont résolues depuis ~/.hephaistos/env.local (jamais commitées). Ceci est un EXEMPLE de sortie pour l'IDE devin.",
+  "mcpServers": {
+    "filesystem":        { "command": "node", "args": ["${SERVERS}/filesystem/dist/index.js", "${WORKSPACE}"] },
+    "sequentialthinking":{ "command": "node", "args": ["${SERVERS}/sequentialthinking/dist/index.js"] },
+    "sqlite-node":       { "command": "node", "args": ["${SERVERS}/mcp-quick-sqlite3/dist/index.js"] },
+    "qdrant": {
+      "command": "node", "args": ["${SERVERS}/qdrant-mcp-server/build/index.js"],
+      "env": { "QDRANT_URL": "${QDRANT_URL}", "QDRANT_API_KEY": "${QDRANT_API_KEY}",
+               "EMBEDDING_PROVIDER": "${EMBEDDING_PROVIDER}", "EMBEDDING_MODEL": "${EMBEDDING_MODEL}",
+               "EMBEDDING_DIMENSIONS": "${EMBEDDING_DIMENSIONS}", "EMBEDDING_BASE_URL": "${EMBEDDING_BASE_URL}",
+               "OPENAI_API_KEY": "${OPENAI_API_KEY}", "OPENAI_BASE_URL": "${OPENAI_BASE_URL}" }
+    },
+    "zvec": {
+      "command": "node", "args": ["${SERVERS}/Zvec/build/index.js"],
+      "env": { "ZVEC_DATA_DIR": "${ZVEC_DATA_DIR}", "EMBEDDING_PROVIDER": "${EMBEDDING_PROVIDER}",
+               "EMBEDDING_MODEL": "${EMBEDDING_MODEL}", "EMBEDDING_DIMENSIONS": "${EMBEDDING_DIMENSIONS}",
+               "QDRANT_BRIDGE_ENABLED": "${QDRANT_BRIDGE_ENABLED}", "QDRANT_URL": "${QDRANT_URL}" }
+    },
+    "orchestrator": {
+      "command": "node", "args": ["${SERVERS}/orchestrator-server/build/index.js"],
+      "env": { "ORCHESTRATOR_DB": "${ORCHESTRATOR_DB}", "NVIDIA_API_KEY": "${NVIDIA_API_KEY}" }
+    },
+    "agentmemory": {
+      "command": "node", "args": ["${AGENTMEMORY_REPO}/out/mcp-server/server.js"],
+      "env": { "NODE_ENV": "production", "AGENT_DB_ROOT": "${AGENT_DB_ROOT}" }
+    },
+    "nim-router": {
+      "command": "python", "args": ["${SERVERS}/nim-router-mcp/nim_mcp_server.py"],
+      "env": { "NVIDIA_API_KEY": "${NVIDIA_API_KEY}" }
+    },
+    "model-discovery":   { "command": "node", "args": ["${SERVERS}/model-discovery-mcp/dist/index.js"] },
+    "kaggle":            { "command": "${SERVERS}/kaggle-mcp/.venv/Scripts/kaggle-mcp-server.exe" },
+    "colab-mcp":         { "command": "python", "args": ["-m", "mcp_colab_server.server"] },
+    "notebooks":         { "command": "node", "args": ["${DEVIN_LAUNCHERS}/datacloud-mcp-launcher.mjs", "notebooks"] },
+    "visualization":     { "command": "node", "args": ["${DEVIN_LAUNCHERS}/datacloud-mcp-launcher.mjs", "visualization"] },
+    "data-agent-kit":    { "command": "node", "args": ["${DEVIN_LAUNCHERS}/datacloud-mcp-launcher.mjs", "data-agent-kit"] },
+    "beacon":            { "command": "beacon", "args": ["mcp", "serve"] },
+    "google-drive":      { "command": "node", "args": ["${SERVERS}/google-drive-mcp/index.js"] },
+    "github-mcp-server": { "url": "https://api.githubcopilot.com/mcp" },
+    "puppeteer":         { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-puppeteer"] }
+  }
+}

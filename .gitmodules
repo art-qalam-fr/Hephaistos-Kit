@@ -1,0 +1,36 @@
+[submodule "mcp/servers/filesystem"]
+	path = mcp/servers/filesystem
+	url = https://github.com/art-qalam-fr/filesystem.git
+[submodule "mcp/servers/sequentialthinking_1tools"]
+	path = mcp/servers/sequentialthinking_1tools
+	url = https://github.com/art-qalam-fr/sequentialthinking_1tools.git
+[submodule "mcp/servers/mcp-quick-sqlite3"]
+	path = mcp/servers/mcp-quick-sqlite3
+	url = https://github.com/art-qalam-fr/mcp-quick-sqlite3.git
+[submodule "mcp/servers/qdrant-mcp-server"]
+	path = mcp/servers/qdrant-mcp-server
+	url = https://github.com/art-qalam-fr/qdrant-mcp-server.git
+[submodule "mcp/servers/Zvec"]
+	path = mcp/servers/Zvec
+	url = https://github.com/art-qalam-fr/Zvec.git
+[submodule "mcp/servers/orchestrator-server"]
+	path = mcp/servers/orchestrator-server
+	url = https://github.com/art-qalam-fr/orchestrator-server.git
+[submodule "mcp/servers/kaggle-mcp"]
+	path = mcp/servers/kaggle-mcp
+	url = https://github.com/art-qalam-fr/kaggle-mcp.git
+[submodule "mcp/servers/google-drive-mcp"]
+	path = mcp/servers/google-drive-mcp
+	url = https://github.com/art-qalam-fr/google-drive-mcp.git
+[submodule "mcp/servers/agentMemory"]
+	path = mcp/servers/agentMemory
+	url = https://github.com/art-qalam-fr/agentMemory.git
+[submodule "mcp/servers/nim-router-mcp"]
+	path = mcp/servers/nim-router-mcp
+	url = https://github.com/art-qalam-fr/nim-router-mcp.git
+[submodule "mcp/servers/model-discovery-mcp"]
+	path = mcp/servers/model-discovery-mcp
+	url = https://github.com/art-qalam-fr/model-discovery-mcp.git
+[submodule "cli/opencli-cookies"]
+	path = cli/opencli-cookies
+	url = https://github.com/art-qalam-fr/opencli-cookies.git

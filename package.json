@@ -1,0 +1,52 @@
+{
+  "name": "@art-qalam-fr/hephaistos-kit",
+  "version": "2.0.0",
+  "description": "AI Agent templates - Skills, Agents, and Workflows for enhanced coding assistance",
+  "bin": {
+    "hephaistos-kit": "./bin/hephaistos-kit.js"
+  },
+  "files": [
+    "bin/",
+    ".agent/",
+    ".vscode/",
+    ".env.example",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "INSTALL.md"
+  ],
+  "scripts": {
+    "init": "node bin/hephaistos-kit.js init",
+    "update": "node bin/hephaistos-kit.js update",
+    "status": "node bin/hephaistos-kit.js status"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/art-qalam-fr/Hephaistos-Kit.git"
+  },
+  "homepage": "https://github.com/art-qalam-fr/Hephaistos-Kit#readme",
+  "bugs": {
+    "url": "https://github.com/art-qalam-fr/Hephaistos-Kit/issues"
+  },
+  "keywords": [
+    "Hephaistos-Kit",
+    "ai",
+    "agent",
+    "gemini",
+    "skills",
+    "templates",
+    "cli",
+    "automation"
+  ],
+  "author": "art-qalam-fr",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "fs-extra": "^11.1.1",
+    "chalk": "^4.1.2",
+    "ora": "^5.4.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
