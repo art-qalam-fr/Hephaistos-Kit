@@ -6,7 +6,7 @@
 |---|---|
 | kind | `submodule` |
 | tier | `personal` |
-| repo | `art-qalam-fr/model-discovery-mcp` |
+| repo | `ArchNext/model-discovery-mcp` |
 | build | `npm install && npm run build` |
 
 **Notes** :

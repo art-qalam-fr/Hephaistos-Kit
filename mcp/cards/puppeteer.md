@@ -4,12 +4,15 @@
 
 | | |
 |---|---|
-| kind | `npx` |
+| kind | `submodule` |
 | tier | `standard` |
 
 **Notes** :
 
-npx -y, navigateur isolé. Complément d'OpenCLI (vrai Chrome).
+Repo autonome `art-qalam-fr/puppeteer` (vendored de
+`@modelcontextprotocol/server-puppeteer`, MIT) — cloné dans `{INSTALL_ROOT}`
+par install.ps1, `dist/` prébuildé commité, aucun fetch `npx` réseau.
+Complément d'OpenCLI (vrai Chrome).
 
 ## Vérifier
 

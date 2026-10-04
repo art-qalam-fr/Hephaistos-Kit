@@ -6,7 +6,7 @@
 |---|---|
 | kind | `submodule` |
 | tier | `standard` |
-| repo | `art-qalam-fr/sequentialthinking_1tools` |
+| repo | `ArchNext/sequentialthinking_1tools` |
 | build | `npm install && npm run build` |
 
 **Notes** :

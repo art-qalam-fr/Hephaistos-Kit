@@ -6,7 +6,7 @@
 |---|---|
 | kind | `submodule` |
 | tier | `personal` |
-| repo | `art-qalam-fr/agentMemory` |
+| repo | `lascard-m/agentMemory` |
 | build | `npm install && npm run build` |
 
 **Env** :

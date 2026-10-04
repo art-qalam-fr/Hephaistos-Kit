@@ -122,3 +122,4 @@ wiki-doc/
 ehthumbs.db
 Thumbs.db
 .ingestion-state.json
+data/

@@ -6,7 +6,7 @@
 |---|---|
 | kind | `submodule` |
 | tier | `standard` |
-| repo | `art-qalam-fr/filesystem` |
+| repo | `ArchNext/filesystem` |
 | build | `npm install && npm run build` |
 
 **Notes** :

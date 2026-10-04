@@ -1,4 +1,4 @@
-Param(
+﻿Param(
     [ValidateSet('auto', 'force', 'skip')]
     [string]$IngestMode = 'auto',
     [switch]$Watch = $true,
@@ -279,11 +279,11 @@ else {
         # UTF-8 obligatoire : le bridge log des emojis, cp1252 le tue sinon
         $env:PYTHONUTF8 = "1"
         $env:PYTHONIOENCODING = "utf-8"
-        # Chemins explicites des serveurs MCP (installations globales)
-        $zvecMcpJs = "<HEPHAISTOS_ROOT>\mcp\servers\zvec-mcp-server\build\index.js"
-        # Préférer la copie <HEPHAISTOS_DATA> — son better-sqlite3 est compilé pour le Node actuel
-        $memoryMcpJs = "<HEPHAISTOS_DATA>\servers\memory\dist\index.js"
-        if (-not (Test-Path $memoryMcpJs)) { $memoryMcpJs = "<HEPHAISTOS_ROOT>\mcp\servers\memory\dist\index.js" }
+        # Chemins explicites des serveurs MCP (installations globales partagées)
+        # Priorité : variables d'env, sinon racine des serveurs installés
+        $serversRoot = if ($env:MCP_SERVERS_ROOT) { $env:MCP_SERVERS_ROOT } else { "C:\Program Files\servers" }
+        $zvecMcpJs = if ($env:ZVEC_MCP_PATH) { $env:ZVEC_MCP_PATH } else { "$serversRoot\zvec-mcp-server\build\index.js" }
+        $memoryMcpJs = if ($env:MEMORY_MCP_PATH) { $env:MEMORY_MCP_PATH } else { "$serversRoot\memory\dist\index.js" }
         if (Test-Path $zvecMcpJs) { $env:ZVEC_MCP_PATH = $zvecMcpJs }
         if (Test-Path $memoryMcpJs) { $env:MEMORY_MCP_PATH = $memoryMcpJs }
         if ($env:AGENT_DB_ROOT) {

@@ -1,69 +1,123 @@
 {
   "$schema": "hephaistos-kit/mcp-manifest/v1",
-  "description": "Configuration MCP canonique art-qalam-fr. Chaque serveur : kind (submodule|npx|url|binary|pip|launcher), tier (standard|personal), env_required = noms SEULEMENT — les valeurs vivent dans ~/.hephaistos/env.local, JAMAIS dans ce fichier.",
+  "description": "Configuration MCP canonique ArchNext. Chaque serveur : kind (submodule|npx|url|binary|pip|launcher), tier (standard|personal), env_required = noms SEULEMENT — les valeurs vivent dans ~/.hephaistos/env.local, JAMAIS dans ce fichier.",
   "install_root": "~/.hephaistos/servers",
   "servers": [
     {
       "name": "filesystem",
-      "kind": "submodule", "tier": "standard",
-      "repo": "art-qalam-fr/filesystem",
+      "kind": "submodule",
+      "tier": "standard",
+      "repo": "ArchNext/filesystem",
       "build": "npm install && npm run build",
-      "command": "node", "args": ["{INSTALL_ROOT}/filesystem/dist/index.js", "{WORKSPACE}"],
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/filesystem/dist/index.js",
+        "{WORKSPACE}"
+      ],
       "env_required": [],
       "role": "Accès fichiers workspace (read/write/search)"
     },
     {
       "name": "sequentialthinking",
-      "kind": "submodule", "tier": "standard",
-      "repo": "art-qalam-fr/sequentialthinking_1tools",
+      "kind": "submodule",
+      "tier": "standard",
+      "repo": "ArchNext/sequentialthinking_1tools",
       "build": "npm install && npm run build",
-      "command": "node", "args": ["{INSTALL_ROOT}/sequentialthinking/dist/index.js"],
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/sequentialthinking/dist/index.js"
+      ],
       "env_required": [],
       "role": "Raisonnement séquentiel pas-à-pas"
     },
     {
       "name": "sqlite-node",
-      "kind": "submodule", "tier": "standard",
-      "repo": "art-qalam-fr/mcp-quick-sqlite3",
+      "kind": "submodule",
+      "tier": "standard",
+      "repo": "ArchNext/mcp-quick-sqlite3",
       "build": "npm install && npm run build",
-      "command": "node", "args": ["{INSTALL_ROOT}/mcp-quick-sqlite3/dist/index.js"],
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/mcp-quick-sqlite3/dist/index.js"
+      ],
       "env_required": [],
       "role": "SQLite — KG mémoire unifiée + bases projet"
     },
     {
       "name": "qdrant",
-      "kind": "submodule", "tier": "standard",
-      "repo": "art-qalam-fr/qdrant-mcp-server",
+      "kind": "submodule",
+      "tier": "standard",
+      "repo": "ArchNext/qdrant-mcp-server",
       "build": "npm install && npm run build",
-      "command": "node", "args": ["{INSTALL_ROOT}/qdrant-mcp-server/build/index.js"],
-      "env_required": ["QDRANT_URL", "EMBEDDING_PROVIDER", "EMBEDDING_MODEL", "EMBEDDING_DIMENSIONS"],
-      "env_optional": ["QDRANT_API_KEY", "OPENAI_API_KEY", "OPENAI_BASE_URL", "EMBEDDING_BASE_URL"],
-      "role": "Recherche vectorielle code/docs (768D projet + 1536D générique)"
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/qdrant-mcp-server/build/index.js"
+      ],
+      "env_required": [
+        "QDRANT_URL",
+        "EMBEDDING_PROVIDER",
+        "EMBEDDING_MODEL",
+        "EMBEDDING_DIMENSIONS"
+      ],
+      "env_optional": [
+        "QDRANT_API_KEY",
+        "OPENAI_API_KEY",
+        "OPENAI_BASE_URL",
+        "EMBEDDING_BASE_URL"
+      ],
+      "role": "Recherche vectorielle code/docs (768D projet + 2048D générique)"
     },
     {
       "name": "zvec",
-      "kind": "submodule", "tier": "standard",
-      "repo": "art-qalam-fr/Zvec",
+      "kind": "submodule",
+      "tier": "standard",
+      "repo": "ArchNext/Zvec",
       "build": "npm install && npm run build",
-      "command": "node", "args": ["{INSTALL_ROOT}/Zvec/build/index.js"],
-      "env_required": ["ZVEC_DATA_DIR", "EMBEDDING_PROVIDER", "EMBEDDING_MODEL", "EMBEDDING_DIMENSIONS"],
-      "env_optional": ["OPENAI_API_KEY", "EMBEDDING_BASE_URL", "QDRANT_BRIDGE_ENABLED", "QDRANT_URL", "QDRANT_COLLECTION"],
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/Zvec/build/index.js"
+      ],
+      "env_required": [
+        "ZVEC_DATA_DIR"
+      ],
+      "env_optional": [
+        "ZVEC_EMBEDDING_PROVIDER",
+        "ZVEC_DENSE_MODEL",
+        "ZVEC_BACKEND",
+        "EMBEDDING_PROVIDER",
+        "EMBEDDING_MODEL",
+        "EMBEDDING_DIMENSIONS",
+        "EMBEDDING_BASE_URL",
+        "OPENAI_API_KEY",
+        "QDRANT_BRIDGE_ENABLED",
+        "QDRANT_URL",
+        "QDRANT_COLLECTION"
+      ],
       "role": "Recherche sémantique mémoire (entités/concepts/actions, 384D)"
     },
     {
       "name": "orchestrator",
-      "kind": "submodule", "tier": "standard",
-      "repo": "art-qalam-fr/orchestrator-server",
+      "kind": "submodule",
+      "tier": "standard",
+      "repo": "ArchNext/orchestrator-server",
       "build": "npm install && npm run build",
-      "command": "node", "args": ["{INSTALL_ROOT}/orchestrator-server/build/index.js"],
-      "env_required": ["ORCHESTRATOR_DB"],
-      "env_optional": ["NVIDIA_API_KEY"],
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/orchestrator-server/build/index.js"
+      ],
+      "env_required": [
+        "ORCHESTRATOR_DB"
+      ],
+      "env_optional": [
+        "NVIDIA_API_KEY"
+      ],
       "role": "Orchestrateur de tâches multi-agents (dispatch/list/update)"
     },
     {
       "name": "kaggle",
-      "kind": "submodule", "tier": "standard",
-      "repo": "art-qalam-fr/kaggle-mcp",
+      "kind": "submodule",
+      "tier": "standard",
+      "repo": "ArchNext/kaggle-mcp",
       "build": "uv sync",
       "command": "{INSTALL_ROOT}/kaggle-mcp/.venv/Scripts/kaggle-mcp-server.exe",
       "env_required": [],
@@ -71,95 +125,223 @@
     },
     {
       "name": "google-drive",
-      "kind": "submodule", "tier": "personal",
-      "repo": "art-qalam-fr/google-drive-mcp",
+      "kind": "submodule",
+      "tier": "personal",
+      "repo": "ArchNext/google-drive-mcp",
       "build": "npm install",
-      "command": "node", "args": ["{INSTALL_ROOT}/google-drive-mcp/index.js"],
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/google-drive-mcp/index.js"
+      ],
       "env_required": [],
       "setup": "Placer gcp-oauth.keys.json + .gdrive-server-credentials.json dans le dossier du serveur (jamais commités — obtenus via get-refresh-token.ps1)",
       "role": "Google Drive — upload/list/fichiers"
     },
     {
       "name": "agentmemory",
-      "kind": "submodule", "tier": "personal",
-      "repo": "art-qalam-fr/agentMemory",
+      "kind": "submodule",
+      "tier": "personal",
+      "repo": "lascard-m/agentMemory",
       "build": "npm install && npm run build",
-      "command": "node", "args": ["{AGENTMEMORY_REPO}/out/mcp-server/server.js"],
-      "env_required": ["AGENT_DB_ROOT"],
+      "command": "node",
+      "args": [
+        "{AGENTMEMORY_REPO}/out/mcp-server/server.js"
+      ],
+      "env_required": [
+        "AGENT_DB_ROOT"
+      ],
       "setup": "Pointer {AGENTMEMORY_REPO} vers le clone local du repo (contient les modifs ingestion)",
       "role": "Mémoire unifiée — KV + graph + vector persistant"
     },
     {
       "name": "nim-router",
-      "kind": "submodule", "tier": "personal",
-      "repo": "art-qalam-fr/nim-router-mcp",
+      "kind": "submodule",
+      "tier": "personal",
+      "repo": "ArchNext/nim-router-mcp",
       "build": "uv venv && uv pip install mcp",
-      "command": "python", "args": ["{INSTALL_ROOT}/nim-router-mcp/nim_mcp_server.py"],
-      "env_required": ["NVIDIA_API_KEY"],
+      "command": "python",
+      "args": [
+        "{INSTALL_ROOT}/nim-router-mcp/nim_mcp_server.py"
+      ],
+      "env_required": [
+        "NVIDIA_API_KEY"
+      ],
       "role": "Routage NVIDIA NIM — modèles Nemotron"
     },
     {
       "name": "model-discovery",
-      "kind": "submodule", "tier": "personal",
-      "repo": "art-qalam-fr/model-discovery-mcp",
+      "kind": "submodule",
+      "tier": "personal",
+      "repo": "ArchNext/model-discovery-mcp",
       "build": "npm install && npm run build",
-      "command": "node", "args": ["{INSTALL_ROOT}/model-discovery-mcp/dist/index.js"],
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/model-discovery-mcp/dist/index.js"
+      ],
       "env_required": [],
       "role": "Découverte des modèles disponibles par provider"
     },
     {
       "name": "notebooks",
-      "kind": "launcher", "tier": "standard",
-      "launcher": "datacloud-mcp-launcher.mjs", "launcher_arg": "notebooks",
-      "command": "node", "args": ["{DEVIN_LAUNCHERS}/datacloud-mcp-launcher.mjs", "notebooks"],
+      "kind": "launcher",
+      "tier": "standard",
+      "launcher": "datacloud-mcp-launcher.mjs",
+      "launcher_arg": "notebooks",
+      "command": "node",
+      "args": [
+        "{DEVIN_LAUNCHERS}/datacloud-mcp-launcher.mjs",
+        "notebooks"
+      ],
       "env_required": [],
       "role": "DataCloud notebooks (Jupyter interactif)"
     },
     {
       "name": "visualization",
-      "kind": "launcher", "tier": "standard",
-      "launcher": "datacloud-mcp-launcher.mjs", "launcher_arg": "visualization",
-      "command": "node", "args": ["{DEVIN_LAUNCHERS}/datacloud-mcp-launcher.mjs", "visualization"],
+      "kind": "launcher",
+      "tier": "standard",
+      "launcher": "datacloud-mcp-launcher.mjs",
+      "launcher_arg": "visualization",
+      "command": "node",
+      "args": [
+        "{DEVIN_LAUNCHERS}/datacloud-mcp-launcher.mjs",
+        "visualization"
+      ],
       "env_required": [],
       "role": "DataCloud visualizations (charts/graphs)"
     },
     {
       "name": "data-agent-kit",
-      "kind": "launcher", "tier": "standard",
-      "launcher": "datacloud-mcp-launcher.mjs", "launcher_arg": "data-agent-kit",
-      "command": "node", "args": ["{DEVIN_LAUNCHERS}/datacloud-mcp-launcher.mjs", "data-agent-kit"],
+      "kind": "launcher",
+      "tier": "standard",
+      "launcher": "datacloud-mcp-launcher.mjs",
+      "launcher_arg": "data-agent-kit",
+      "command": "node",
+      "args": [
+        "{DEVIN_LAUNCHERS}/datacloud-mcp-launcher.mjs",
+        "data-agent-kit"
+      ],
       "env_required": [],
       "role": "DataCloud data-agent-kit"
     },
     {
       "name": "beacon",
-      "kind": "binary", "tier": "personal",
-      "command": "beacon", "args": ["mcp", "serve"],
+      "kind": "binary",
+      "tier": "personal",
+      "command": "beacon",
+      "args": [
+        "mcp",
+        "serve"
+      ],
       "install": "Installer Beacon séparément (binaire externe) puis mettre 'beacon' dans le PATH",
       "env_required": [],
       "role": "Beacon — ingestion/indexation docs"
     },
     {
       "name": "colab-mcp",
-      "kind": "pip", "tier": "standard",
+      "kind": "pip",
+      "tier": "standard",
       "build": "uv tool install google-colab-mcp",
-      "command": "python", "args": ["-m", "mcp_colab_server.server"],
+      "command": "python",
+      "args": [
+        "-m",
+        "mcp_colab_server.server"
+      ],
       "env_required": [],
       "role": "Google Colab — notebooks cloud"
     },
     {
       "name": "github-mcp-server",
-      "kind": "url", "tier": "standard",
+      "kind": "url",
+      "tier": "standard",
       "url": "https://api.githubcopilot.com/mcp",
       "env_required": [],
       "role": "GitHub officiel — repos/PR/issues (Copilot MCP)"
     },
     {
       "name": "puppeteer",
-      "kind": "npx", "tier": "standard",
-      "command": "npx", "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "kind": "submodule",
+      "tier": "standard",
+      "repo": "art-qalam-fr/puppeteer",
+      "build": "npm ci",
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/puppeteer/dist/index.js"
+      ],
       "env_required": [],
+      "note": "Repo autonome art-qalam-fr/puppeteer (vendored de @modelcontextprotocol/server-puppeteer, dist prebuild commite) — clone auto dans INSTALL_ROOT par install.ps1, jamais de fetch npx reseau",
       "role": "Navigateur bac à sable (pages publiques, screenshots, tests)"
+    },
+    {
+      "name": "context7",
+      "kind": "npm",
+      "tier": "standard",
+      "install": "npm i -g @upstash/context7-mcp",
+      "command": "node",
+      "args": [
+        "{NPM_GLOBAL}/node_modules/@upstash/context7-mcp/dist/index.js"
+      ],
+      "env_required": [
+        "CONTEXT7_API_KEY"
+      ],
+      "role": "Context7 — documentation des bibliothèques à jour"
+    },
+    {
+      "name": "memory",
+      "kind": "npm",
+      "tier": "standard",
+      "install": "npm i -g @modelcontextprotocol/server-memory",
+      "command": "node",
+      "args": [
+        "{NPM_GLOBAL}/node_modules/@modelcontextprotocol/server-memory/dist/index.js"
+      ],
+      "env_optional": [
+        "MEMORY_FILE_PATH"
+      ],
+      "role": "Mémoire persistante (knowledge graph) — serveur de référence"
+    },
+    {
+      "name": "memory-f",
+      "kind": "local",
+      "tier": "personal",
+      "command": "node",
+      "args": [
+        "{MEMORY_F_ROOT}/memory/dist/index.js"
+      ],
+      "env_optional": [
+        "MEMORY_FILE_PATH"
+      ],
+      "note": "Variante memory hors INSTALL_ROOT (F:/Promgramation-teste/servers) — adapter {MEMORY_F_ROOT} à la machine",
+      "role": "Mémoire persistante (instance F:)"
+    },
+    {
+      "name": "postgres",
+      "kind": "local",
+      "tier": "personal",
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/postgres-mcp/dist/index.js"
+      ],
+      "env_optional": [
+        "POSTGRES_HOST",
+        "POSTGRES_PORT",
+        "POSTGRES_DB",
+        "POSTGRES_USER"
+      ],
+      "note": "postgres-mcp pré-installé dans INSTALL_ROOT — POSTGRES_PASSWORD via env héritée, jamais en fichier",
+      "role": "Accès PostgreSQL local (n8n_workflows)"
+    },
+    {
+      "name": "mcp-mux",
+      "kind": "npm",
+      "tier": "standard",
+      "install": "npm i -g github:art-qalam-fr/mcp-mux",
+      "command": "node",
+      "args": [
+        "{NPM_GLOBAL}/node_modules/mcp-mux/src/shim.mjs",
+        "--config",
+        "{USERPROFILE}/.config/mcp-mux/mcp-mux.json"
+      ],
+      "note": "Broker multiplexeur optionnel : expose les serveurs de mcp-mux.json prefixes mcp-mux.<srv>__. Config broker : mcp/mcp-mux.config.template.json"
     }
   ]
 }

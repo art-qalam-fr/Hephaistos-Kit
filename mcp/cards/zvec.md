@@ -6,7 +6,7 @@
 |---|---|
 | kind | `submodule` |
 | tier | `standard` |
-| repo | `art-qalam-fr/Zvec` |
+| repo | `ArchNext/Zvec` |
 | build | `npm install && npm run build` |
 
 **Env** :

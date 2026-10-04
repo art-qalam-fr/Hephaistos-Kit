@@ -1,6 +1,6 @@
 # AGENT RULES - VERSION RESTRUCTURÉE V2 (CORRIGÉE)
 
-## � DÉMARRAGE DE SESSION (PRIORITÉ ABSOLUE)
+## 🚀 DÉMARRAGE DE SESSION (PRIORITÉ ABSOLUE)
 
 ## FALLBACK AUTO-LOAD
 
@@ -47,7 +47,7 @@ Si workspace contient .agent/agents/ → Activer INTELLIGENT AGENT ROUTING
 
 ---
 
-## �📋 HIÉRARCHIE DES PRIORITÉS DES RÈGLES
+## 📋 HIÉRARCHIE DES PRIORITÉS DES RÈGLES
 
 1. **LOIS D'ASIMOV** (Sécurité et bien-être) - Priorité absolue
 2. **RÈGLE DE ROUTAGE VECTORIEL CIBLÉ** (PRIORITÉ HAUTE - AVANT ÉVAL SKILLS)
@@ -66,7 +66,7 @@ Si workspace contient .agent/agents/ → Activer INTELLIGENT AGENT ROUTING
 11. **REQUEST CLASSIFIER** (Classification des requêtes) - Priorité haute
 12. **INTELLIGENT AGENT ROUTING** (Routage automatique) - Priorité haute
 13. **TIER 0-2** (Règles universelles/code/design) - Priorité standard
-14. **ÉCONOMIE DE TOKENS** (Recherche avant lecture, lecture partielle, sub-agents) - Priorité haute
+14. **ÉCONOMIE DE TOKENS** (Recherche avant lecture, lecture partielle, sous-agents CLI / sub-agents) - Priorité haute
 
 ---
 
@@ -255,12 +255,14 @@ Toute dérogation à cette règle constitue une violation de l'architecture et p
 
 ---
 
-## � ROUTAGE GLOBAL DES FOURNISSEURS ET MODÈLES GRATUITS
+## 🔀 ROUTAGE GLOBAL DES FOURNISSEURS ET MODÈLES GRATUITS
 
 ### RÈGLE FONDAMENTALE
+
 L'agent principal agit d'abord comme architecte et orchestrateur. Il doit déléguer au maximum les tâches d'analyse, de revue, de documentation, de test et d'implémentation aux agents disponibles, en privilégiant les modèles locaux ou gratuits afin de réduire les coûts et les tokens.
 
 ### ORDRE OBLIGATOIRE DE SÉLECTION
+
 1. Interroger `model-discovery` (`model://available/free` et `ping-supplier`) pour connaître les modèles réellement disponibles.
 2. Choisir en priorité un modèle local Ollama ou un fournisseur gratuit.
 3. Sélectionner l'interface native du fournisseur :
@@ -274,7 +276,9 @@ L'agent principal agit d'abord comme architecte et orchestrateur. Il doit délé
 5. Utiliser Orchestrator MCP pour créer, affecter et suivre les tâches ; ne jamais écrire directement dans sa base SQLite.
 
 ### RÈGLE D'ARCHITECTURE
+
 L'agent principal ne doit pas exécuter seul une tâche multi-domaine si un agent spécialisé disponible peut la prendre. Il conserve :
+
 - la décomposition et les contrats ;
 - la sélection du fournisseur/modèle ;
 - la synthèse ;
@@ -282,6 +286,7 @@ L'agent principal ne doit pas exécuter seul une tâche multi-domaine si un agen
 - la gestion des conflits et des risques.
 
 ### ROUTAGE PAR TYPE DE TÂCHE
+
 - Exploration : explorer-agent, Goose ou Hermes free ;
 - Frontend : frontend-specialist ou Kilo/Goose free ;
 - Backend/API : backend-specialist ;
@@ -293,7 +298,9 @@ L'agent principal ne doit pas exécuter seul une tâche multi-domaine si un agen
 - Coordination : Orchestrator MCP + Memory MCP.
 
 ### MODÈLES OLLAMA CLOUD
+
 Les modèles Ollama portant le suffixe `:cloud` sont distants via Ollama et doivent être distingués des modèles locaux. Après vérification via Model Discovery et `ollama list`, les candidats disponibles peuvent inclure :
+
 - `gpt-oss:120b-cloud` ;
 - `gpt-oss:20b-cloud` ;
 - `nemotron-3-ultra:cloud` ;
@@ -303,17 +310,22 @@ Les modèles Ollama portant le suffixe `:cloud` sont distants via Ollama et doiv
 Ils ne doivent pas être sélectionnés aveuglément : vérifier la disponibilité, les limites et le coût éventuel au moment de la délégation.
 
 ### RECETTE VALIDÉE — AGENT DE CODAGE OLLAMA CLOUD (outils fichiers)
+
 `ollama run` et `/api/generate` ne donnent PAS d'outils au modèle (texte seul). Pour qu'un modèle Ollama Cloud lise/écrive le workspace, le faire passer par un client agent qui expose les tools :
 
 - **Hermes CLI (validé 2026-09-23)** :
+
   `OLLAMA_API_KEY=local-daemon OLLAMA_BASE_URL=http://localhost:11434/v1 hermes -z "<prompt>" -m gpt-oss:120b-cloud --provider ollama-cloud --yolo`
   Le daemon Ollama local détient les credentials réels ; la clé factice ne sert qu'à satisfaire le check Hermes. Hermes fournit ses outils fichiers natifs au modèle.
+
 - **KiloCode CLI** : `kilo run --dir <workspace> --model ollama-cloud/gpt-oss:120b --auto`. Attention : charger tout le workspace dépasse le contexte (~131k) — prompts resserrés et lectures ciblées obligatoires.
 - **Goose** : fonctionne pour Ollama local, mais n'annonce pas ses extensions MCP au modèle cloud (`tool not advertised`) — ne pas l'utiliser pour GPT-OSS cloud.
 - Après chaque délégation : vérifier sur disque que les fichiers existent réellement ; les agents peuvent rapporter un diff sans l'avoir persisté.
 
 ### ROSTER HERMES VALIDÉ (2026-09-23)
+
 Config permanente dans `%LOCALAPPDATA%\hermes\.env` : `OLLAMA_BASE_URL=http://localhost:11434/v1` + `OLLAMA_API_KEY=local-daemon` (le daemon local porte les credentials cloud). Plus besoin de variables par appel.
+
 - `hermes -z "..." -m gpt-oss:120b-cloud --provider ollama-cloud --yolo` → codage principal.
 - `hermes -z "..." -m poolside/laguna-s-2.1:free --provider nous --yolo` → codage alternatif (agentic coding model).
 - `hermes -z "..." -m nex-agi/nex-n2.5-mini:free --provider openrouter --yolo` → tâches légères.
@@ -321,12 +333,14 @@ Config permanente dans `%LOCALAPPDATA%\hermes\.env` : `OLLAMA_BASE_URL=http://lo
 - Nous `:free` disponibles : laguna-s/xs-2.1, step-3.7-flash, longcat-2.0, ling-3.0-flash-sante/fin. `solar-pro4:free` renvoie 404 — ne plus l'utiliser.
 
 ### AUTRES CLI AGENTS
+
 - **KiloCode** : `kilocode run "..."` — configuré `kilo/kilo-auto/free` dans `~/.config/kilo/kilo.json`. Modèles `:free` testés OK : `kilo/nvidia/nemotron-3-super-120b-a12b:free`, `kilo/nvidia/nemotron-3-ultra-550b-a55b:free`, `kilo/nex-agi/nex-n2.5-pro:free`. Attention : charger trop de fichiers sature le contexte ; interruptions d'édition laissent des fichiers corrompus — toujours linter après.
 - **Hermes ACP** : `hermes.exe acp --accept-hooks` pilotable en stdio JSON-RPC (ex: `acp_client.py` si présent dans le workspace). Config `~/AppData/Local/hermes/config.yaml` : default `ollama-cloud`/`gpt-oss:120b-cloud`, auxiliaires `laguna-xs:free`.
 - **Gemini CLI** : headless `-p` peut hang/exit 1 — nécessite une session interactive d'auth/trust unique avant usage scripté.
 - **Benchmark** : si un script `bench-models.*` existe dans le workspace, l'utiliser pour pinger les modèles en parallèle ; trier sur le contenu (`READY`) car hermes exit 0 même sur erreur API. OpenRouter `:free` = quota journalier, se vide vite → fallback Nous/Ollama/Kilo.
 
 ### FALLBACK
+
 Si le fournisseur choisi échoue :
 `model-discovery → Ollama local/free provider → Ollama cloud/free route → Goose/Kilo/Hermes free → autre fournisseur configuré avec autorisation explicite`.
 
@@ -335,11 +349,13 @@ Si le fournisseur choisi échoue :
 ## 🤖 DÉLÉGATION MULTI-AGENTS AUTOMATISÉE (ORCHESTRATEUR INTELLIGENT)
 
 ### REGISTRE CANONIQUE
+
 **Avant toute délégation**, lire `.agent/REGISTRY.md` — il liste les agents réels, leurs skills, les providers/modèles disponibles et les outils morts à ne PAS utiliser (ex: Trae abandonné, gemini CLI stock bloqué, llama.cpp sans modèle).
 
 🎯 **Agent par défaut = celui déclaré dans `.agent/REGISTRY.md`** (section « Agent exécutant par défaut »). Ne pas présumer kilo ni aucun autre ; si le REGISTRY est absent, ordre de repli `agy` → `kilo` → `hermes`.
 
 ### RÈGLE OBLIGATOIRE DE DÉLÉGATION
+
 En tant qu'agent principal (Antigravity ou Devin), ton rôle premier est celui d'**architecte** et de **planificateur**.
 Tu DOIS automatiser la délégation d'une grande partie du travail d'exécution (contrôle de code, rédaction de documentation, refactoring, tests) aux autres agents (`agy`, KiloCode, Hermes, etc.).
 
@@ -360,14 +376,20 @@ Tu DOIS automatiser la délégation d'une grande partie du travail d'exécution 
    - Le flag `-z` garantit que tu ne recevras que la réponse utile, idéale pour un pipeline scripté ou une délégation rapide en cours de tâche.
 
 3. **Via `agy` (CLI Antigravity — abonnement, toujours dispo)** :
-   - ⚠️ `agy` peut ne pas être dans le PATH. Binaire typique : `%LOCALAPPDATA%\agy\bin\agy.exe`.
+   - ⚠️ `%LOCALAPPDATA%\agy\bin` est dans le **PATH utilisateur** (persistant depuis l'install). Un shell déjà ouvert conserve l'ancien PATH → rouvrir un shell, ou `export PATH="$PATH:$LOCALAPPDATA/agy/bin"` (bash) / `$env:Path += ";$env:LOCALAPPDATA\agy\bin"` (PowerShell). Binaire : `%LOCALAPPDATA%\agy\bin\agy.exe` (fallback absolu si PATH absent).
    - Syntaxe testée : `agy.exe --dangerously-skip-permissions --print="{prompt}" --print-timeout 600s` (flags AVANT `--print`, prompt attaché avec `=`, timeout avec unité `s`).
    - `agy --print "x" --dangerously-skip-permissions` → ERREUR : `--print` avale le flag comme prompt.
    - Enregistré dans l'orchestrateur avec `full_prompt:true` — `dispatch_task` lui envoie le prompt complet directement.
    - ⚠️ Ne PAS confondre avec `gemini` CLI stock : bloqué (`IneligibleTierError`). Toujours passer par `agy.exe`.
    - ⚠️ `dispatch_task`/`create_task` crée la tâche mais **ne réveille PAS l'agent** — lancer le CLI soi-même ensuite (le sidecar poller n'est pas fiable).
 
+4. **« Sous-agents » vs sub-agents** :
+   - « Sous-agents » = CLI agents externes (`agy`, `kilo`, `hermes`) via `orchestrator.dispatch_task`, `acp-dispatch.mjs` ou appel direct — c'est la délégation attendue pour économiser les tokens de l'agent principal.
+   - « Sub-agents » = agents internes à l'IDE/client — usage complémentaire seulement.
+   - `nim-router` (MCP) : package autonome `nim-router-mcp` (`nim_mcp_server.py` + `router.py` + `registre-modeles.json` — sous-module `mcp/servers/nim-router-mcp` du kit ou répertoire déployé). Enregistré aux DEUX endroits (même chemin absolu) : `%APPDATA%/devin/mcp_config.json` (Devin, rechargé à chaud) et `~/.config/mcp-mux/mcp-mux.json` (mux — nécessite kill du broker `node … broker.mjs` pour recharger). Outils `nim_domains`/`nim_models`/`nim_chat`/`nim_chat_model`/`nim_embed` — routage NIM par domaine + embeddings 2048D.
+
 ### SCÉNARIOS TYPIQUES DE DÉLÉGATION
+
 - **Revue de code** : `dispatch_task(task_type:"review", files:[...])` → agent choisi automatiquement selon skills.
 - **Bug** : `dispatch_task(task_type:"debug", context:"symptômes", files:[...])`.
 - **Documentation** : `dispatch_task(task_type:"docs", ...)`.
@@ -378,7 +400,9 @@ Tu DOIS automatiser la délégation d'une grande partie du travail d'exécution 
 > Cette délégation doit devenir le comportement PAR DÉFAUT pour éviter de surcharger ta propre fenêtre de contexte et pour maximiser l'efficacité du système multi-agents global.
 
 ### ⚠️ SÉLECTION DE MODÈLE DES SOUS-AGENTS (mise à jour 2026-10-01)
+
 Ordre de priorité OBLIGATOIRE pour kilo/hermes :
+
 1. **NVIDIA NIM direct** — `https://integrate.api.nvidia.com/v1`, clé `NVIDIA_API_KEY` (à fournir via `~/.hephaistos/env.local` ou le `.env` du projet — jamais en clair dans le repo). Modèles : `nvidia/nemotron-3-super-120b-a12b` (défaut), `nvidia/nemotron-3-ultra-550b-a55b` (deep), `nvidia/nemotron-3.5-lightning-30b-a3b` (fast).
 2. **Ollama cloud/local** — seulement si NVIDIA ne répond pas. ⚠️ Ollama Cloud = quota mensuel (`gpt-oss:120b-cloud` a déjà été épuisé → HTTP 429) : vérifier avant de compter dessus.
 3. **`kilo-auto/free`** — DERNIER recours uniquement : qualité insuffisante observée (reformatage massif des fichiers, travail partiel).
@@ -386,6 +410,7 @@ Ordre de priorité OBLIGATOIRE pour kilo/hermes :
 - Vérifier le modèle actif dans la sortie kilo (`> code · <modèle>`) ; si `kilo-auto/free` réapparaît, corriger `kilo.json` avant de lancer.
 
 ### ⚠️ COMPLÉMENTS TESTÉS (2026-10-02)
+
 - **`kilo run "prompt"`** = one-shot KiloCode (modèle = config). `hermes -z "prompt"` = réponse utile seule.
 - Brief long → écrire dans un fichier `.md` et passer le chemin (évite le quoting multi-lignes).
 - Post-délégation : `git status` + `git diff --stat` pour prouver le travail réel, puis `tsc --noEmit` / `py_compile` soi-même — ne jamais faire confiance au rapport seul.
@@ -403,22 +428,30 @@ Ordre de priorité OBLIGATOIRE pour kilo/hermes :
 > sur le profil par défaut — l'extension OpenCLI est le contournement officiel.
 
 ### 1. PRÉREQUIS OpenCLI
+
 - Daemon Node sur `:19825` (service, auto). Vérification : `opencli doctor`.
 - Chrome DOIT être lancé avec l'extension : `.agent/scripts/run_chrome_opencli.bat`
+
   (injecté par Hephaistos-Kit) ou `chrome.exe --load-extension=%USERPROFILE%\.opencli\extension`.
+
 - **Point de défaillance n°1** : daemon OK + « Extension: not connected » = Chrome non lancé avec l'extension → relancer le lanceur. Ne pas chercher ailleurs.
 
 ### 2. USAGE OpenCLI (CLI pur — PAS de serveur MCP)
+
 - Navigateur générique : `opencli browser <session> <cmd>` — session `main` par défaut, onglets bindés par `open`/`bind`. Commandes : `open`, `eval`, `click`, `fill`, `type`, `screenshot`, `tab list`, `network`, `extract`, `find`, `upload`, `wait`, `state`, `dialog`. ⚠️ `-f yaml` NON supporté par `browser` (sortie JSON par défaut).
 - Adaptateurs site : `opencli <site> <cmd> -f yaml` (~150 : reddit, twitter, facebook, instagram, linkedin, youtube, github, v2ex, tiktok, chatgpt, claude, antigravity…). Inventaire : `opencli list` ; doc d'un site : `opencli <site> --help -f yaml`.
 - Compte : OpenCLI réutilise la session Chrome EXISTANTE — jamais de login auto ni de
+
   lecture de cookies. Pas connecté → demander à l'utilisateur de se loguer dans Chrome.
-- **Cookies (adaptateur maison `art-qalam-fr/opencli-cookies`)** : `opencli cookies dump
+
+- **Cookies (adaptateur maison `ArchNext/opencli-cookies`)** : `opencli cookies dump
+
   --domain <d>` (jar complet, HttpOnly inclus, valeurs masquées ; `--reveal` en clair)
   et `opencli cookies export --domain <d> --out f.json` (format Cookie-Editor →
-  `thot-agents configure <canal>-cookies`). Install : `npm i -g github:art-qalam-fr/opencli-cookies`.
+  `thot-agents configure <canal>-cookies`). Install : `npm i -g github:ArchNext/opencli-cookies`.
 
 ### 3. PUPPETEER MCP — bac à sable
+
 - Outils : `puppeteer_navigate`, `screenshot`, `click`, `fill`, `select`, `hover`, `evaluate`. Ne partage RIEN avec le Chrome OpenCLI (cookies/logins séparés).
 - Référence : procédure complète dans la doc providers du projet (OpenCLI §9) si présente.
 
@@ -441,7 +474,7 @@ Ordre de priorité OBLIGATOIRE pour kilo/hermes :
 
 ---
 
-## �🧠 DISCIPLINE DE MÉMOIRE UNIFIÉE (AGENTMEMORY)
+## 🧠 DISCIPLINE DE MÉMOIRE UNIFIÉE (AGENTMEMORY)
 
 ### 1. ANCRAGE DU STOCKAGE
 
@@ -506,9 +539,12 @@ modifiés, erreurs, commandes) et l'indexe dans la mémoire unifiée avec
 #### QUAND L'UTILISER
 
 - **Avant de déboguer** un problème d'infra, MCP, config ou outillage :
+
   chercher dans memory/zvec si un digest Beacon décrit déjà la résolution
   (ex: erreur identique, même fichier de config).
+
 - **Requêtes "comment ça a été résolu" / "session passée" / "autre agent"** :
+
   les digests Beacon sont la source — ils traversent les projets et les agents.
 
 #### OUTILS
@@ -531,7 +567,7 @@ modifiés, erreurs, commandes) et l'indexe dans la mémoire unifiée avec
 
 La mémoire unifiée n'est utile que si la boucle est fermée :
 
-```
+```text
 sessions agents → Beacon (capture, service BeaconCollector) → beacon_ingest
   → mémoire unifiée + knowledge/ (indexés par auto-ingest)
   → retrieval (memory_search / qdrant / zvec) → action de l'agent
@@ -543,11 +579,16 @@ sessions agents → Beacon (capture, service BeaconCollector) → beacon_ingest
 ```
 
 - **Fin de session ou phase majeure → `/reflect`** (`.agent/workflows/reflect.md`) :
+
   collecte les digests Beacon de TOUS les agents + la session courante, extrait
   les patterns, persiste en double écriture (memory + ADR).
+
 - **Réfléchir sans Beacon = n'apprendre que de sa propre session.** Les digests
+
   cross-agents sont la matière première de la réflexion.
+
 - **Intention** : tout travail identifié mais non fait devient une entité
+
   `intention` en mémoire — consultée au prochain `/plan` ou `/reflect`.
 
 ### REGISTRE GLOBAL DES PROJETS
@@ -555,13 +596,13 @@ sessions agents → Beacon (capture, service BeaconCollector) → beacon_ingest
 Tous les projets de la racine de développement sont référencés dans un registre
 interrogeable par n'importe quel agent, depuis n'importe quel workspace :
 
-| Couche | Où | Contenu | Accès |
+|Couche|Où|Contenu|Accès|
 |---|---|---|---|
-| **Registre SQL** | `$AGENT_DB_ROOT/projects-registry.db` | `projects` (état, stack, taille, git, dates), `project_techs` (1614 liens), `project_relations`, `scan_runs` | `sqlite-node` ou sqlite3 direct |
-| **Qdrant** | collection `projects_index` (2048D) | 1 point/projet : nom+description+stack vectorisés | `qdrant.search` (EMBED-FIRST NVIDIA) |
-| **Knowledge Graph** | entités `project:<nom>`, `tech:<lang>` | état, chemin, remote, description + relations `utilise`/`contient` | `memory_search` |
+|**Registre SQL**|`$AGENT_DB_ROOT/projects-registry.db`|`projects` (état, stack, taille, git, dates), `project_techs` (1614 liens), `project_relations`, `scan_runs`|`sqlite-node` ou sqlite3 direct|
+|**Qdrant**|collection `projects_index` (2048D)|1 point/projet : nom+description+stack vectorisés|`qdrant.search` (EMBED-FIRST NVIDIA)|
+|**Knowledge Graph**|entités `project:<nom>`, `tech:<lang>`|état, chemin, remote, description + relations `utilise`/`contient`|`memory_search`|
 
-#### QUAND L'UTILISER
+#### QUAND L'UTILISER — REGISTRE DES PROJETS
 
 - « Est-ce que j'ai déjà un projet qui fait X ? » → `qdrant.search` sur `projects_index`
 - « Quels sont mes projets Python/embryonnaires/dormants ? » → SQL `projects-registry.db`
@@ -661,11 +702,11 @@ L'agent DOIT utiliser le MCP Memory et zvec (sqlite-node: `${AGENT_DB_ROOT}/memo
 
 ### 2. STRATÉGIE DE SUBAGENTS
 
-- Utiliser les subagents libéralement pour garder la fenêtre de contexte principale propre
-- Déléguer la recherche, l'exploration et l'analyse parallèle aux subagents
-- Pour les problèmes complexes, lancer plus de calcul via les subagents
-- Une tâche par subagent pour une exécution focalisée
-- **SEUIL OBLIGATOIRE** : Si >3 fichiers à explorer ou >200 lignes de code à analyser → sub-agent obligatoire. Le contexte principal ne doit recevoir que le résumé.
+- Utiliser les sous-agents libéralement pour garder la fenêtre de contexte principale propre
+- Déléguer la recherche, l'exploration et l'analyse parallèle aux sous-agents
+- Pour les problèmes complexes, lancer plus de calcul via les sous-agents
+- Une tâche par sous-agent pour une exécution focalisée
+- **SEUIL OBLIGATOIRE** : Si >3 fichiers à explorer ou >200 lignes de code à analyser → sous-agent (CLI externe, cf. § délégation) obligatoire. Le contexte principal ne doit recevoir que le résumé.
 
 ### 2b. ÉCONOMIE DE TOKENS — RÈGLES OBLIGATOIRES
 
@@ -845,7 +886,7 @@ Avant toute tâche non triviale (3+ étapes ou décisions architecturales), l'ag
 - [ ] La tâche est-elle non triviale (3+ étapes ou décisions architecturales) ?
 - [ ] Ai-je créé un plan détaillé avec des éléments vérifiables ?
 - [ ] Ai-je utilisé `create_task` de l'orchestrateur MCP pour structurer la tâche ?
-- [ ] Ai-je délégué les sous-tâches complexes aux subagents ?
+- [ ] Ai-je délégué les sous-tâches complexes aux sous-agents ?
 - [ ] Ai-je écrit des specs détaillés pour réduire l'ambiguïté ?
 - [ ] Ne marquerai-je PAS la tâche comme terminée sans preuve de fonctionnement ?
 - [ ] Ai-je testé, vérifié les logs et démontré la correction ?
@@ -1006,14 +1047,14 @@ Quand un agent est appliqué automatiquement, informer l'utilisateur :
 | **Nouvelle Fonctionnalité / Build** | Découverte profonde      | POSER minimum 3 questions stratégiques                                        |
 | **Édition de code / Bug Fix**       | Vérification de contexte | Confirmer la compréhension + poser des questions d'impact                     |
 | **Vague / Simple**                  | Clarification            | Demander But, Utilisateurs et Périmètre                                       |
-| **Orchestration complète**          | Gardien                  | **STOP** subagents jusqu'à confirmation des détails du plan par l'utilisateur |
+| **Orchestration complète**          | Gardien                  | **STOP** sous-agents jusqu'à confirmation des détails du plan par l'utilisateur |
 | **"Procéder" direct**               | Validation               | **STOP** → Même si des réponses sont données, poser 2 questions "Cas limite"  |
 
 #### Protocole
 
 1. **Ne jamais supposer :** Si même 1% est flou, DEMANDER.
 2. **Gérer les requêtes spéculaires :** Quand l'utilisateur donne une liste (Réponses 1, 2, 3...), ne PAS sauter le portail. Au lieu de cela, demander les **Compromis** ou **Cas limites** (ex: "LocalStorage confirmé, mais devrions-nous gérer l'effacement des données ou le versioning ?") avant de commencer.
-3. **Attendre :** Ne PAS invoquer de subagents ou écrire du code jusqu'à ce que l'utilisateur franchisse le Portail.
+3. **Attendre :** Ne PAS invoquer de sous-agents ou écrire du code jusqu'à ce que l'utilisateur franchisse le Portail.
 4. **Référence :** Protocole complet dans `@[skills/brainstorming]`.
 
 ### 🏁 Protocole de Checklist Finale
@@ -1094,19 +1135,13 @@ Quand un agent est appliqué automatiquement, informer l'utilisateur :
 
 ## 📁 RÉFÉRENCE RAPIDE
 
-### Configs MCP par IDE (canonique = Devin)
+### Config MCP — référence unique
 
-| IDE / Extension                 | Fichier de config MCP                                                                      |
-| ------------------------------- | ------------------------------------------------------------------------------------------ |
-| **Devin**                       | `%APPDATA%/devin/mcp_config.json`                                                          |
-| **Antigravity**                 | `~/.antigravity/mcp_config.json`                                                           |
-| **Cursor**                      | `~/.cursor/mcp.json`                                                                       |
-| **KiloCode**                    | `~/.kilocode/mcp_config.json` (ou `~/.config/kilo/mcp_config.json`)                        |
-| **KiloCode (ext. VS Code)**     | `%APPDATA%/Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json`          |
-| **KiloCode (ext. Antigravity)** | `%APPDATA%/Antigravity/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json`   |
-| **Cline/Roo (ext.)**            | `%APPDATA%/<IDE>/User/globalStorage/rooveterinaryinc.roo-cline/settings/mcp_settings.json` |
+- **SEULE référence client** : `%APPDATA%/devin/mcp_config.json` (Devin, rechargé à chaud). Ne pas recréer de `mcp_config.json`/`mcp.json`/`mcp_settings.json` pour Windsurf, Antigravity, Cursor, KiloCode ou Claude Desktop — ces copies ont été supprimées (dérive + secrets en clair).
+- **Broker** : `~/.config/mcp-mux/mcp-mux.json` — config propre du multiplexeur (mcporter/dashboard), distincte du registre client. Kill du broker `node … broker.mjs` pour recharger.
+- sqlite-node expose 9 alias de bases (default, memory, graph, cache, zvec, qdrant, n8n_main, n8n_templates, orchestrator). Racine de stockage : `AGENT_DB_ROOT`.
 
-Toutes ces configs partagent le même bloc `mcpServers` (sqlite-node 9 alias : default, memory, graph, cache, zvec, qdrant, n8n_main, n8n_templates, orchestrator). Racine de stockage : `AGENT_DB_ROOT`.
+> 🔐 **AUCUN secret en clair dans les JSON MCP.** Les clés vivent en variables d'environnement User (`NVIDIA_API_KEY`, `OPENAI_API_KEY`, `GITHUB_TOKEN`, `POSTGRES_PASSWORD`, `HF_TOKEN`) — les serveurs enfants héritent l'env du parent. Pour les serveurs distants (headers), utiliser l'interpolation `${env:NOM_VAR}` (validée dans Devin).
 
 ### Agents & Skills
 
@@ -1122,4 +1157,4 @@ Toutes ces configs partagent le même bloc `mcpServers` (sqlite-node 9 alias : d
 
 ---
 
-#### الا اله الا اللهلله
+**الا اله الا اللهلله**

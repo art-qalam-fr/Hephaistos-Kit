@@ -85,5 +85,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CLI tool for easy installation and updates
 - Comprehensive documentation and architecture guide
 
-[Unreleased]: https://github.com/art-qalam-fr/Hephaistos-Kit/compare/v2.0.0...HEAD
-[2.0.0]: https://github.com/art-qalam-fr/Hephaistos-Kit/releases/tag/v2.0.0
+[Unreleased]: https://github.com/ArchNext/Hephaistos-Kit/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/ArchNext/Hephaistos-Kit/releases/tag/v2.0.0

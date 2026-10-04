@@ -1,5 +1,5 @@
 {
-  "name": "@art-qalam-fr/hephaistos-kit",
+  "name": "@archnext/hephaistos-kit",
   "version": "2.0.0",
   "description": "AI Agent templates - Skills, Agents, and Workflows for enhanced coding assistance",
   "bin": {
@@ -22,11 +22,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/art-qalam-fr/Hephaistos-Kit.git"
+    "url": "https://github.com/ArchNext/Hephaistos-Kit.git"
   },
-  "homepage": "https://github.com/art-qalam-fr/Hephaistos-Kit#readme",
+  "homepage": "https://github.com/ArchNext/Hephaistos-Kit#readme",
   "bugs": {
-    "url": "https://github.com/art-qalam-fr/Hephaistos-Kit/issues"
+    "url": "https://github.com/ArchNext/Hephaistos-Kit/issues"
   },
   "keywords": [
     "Hephaistos-Kit",
@@ -38,7 +38,7 @@
     "cli",
     "automation"
   ],
-  "author": "art-qalam-fr",
+  "author": "ArchNext",
   "license": "MIT",
   "dependencies": {
     "commander": "^11.0.0",

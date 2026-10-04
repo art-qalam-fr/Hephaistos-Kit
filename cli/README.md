@@ -23,7 +23,7 @@ les utiliser une fois présents.
 | CLI | Rôle | Installation | Vérifier |
 |---|---|---|---|
 | **opencli** | Pilote le Chrome réel (session loguée) : click/fill/eval/screenshot + ~150 adaptateurs site | `npm i -g @jackwener/opencli` puis `opencli doctor` + Chrome avec l'extension (`%USERPROFILE%\.opencli\extension`, ou `.agent/scripts/run_chrome_opencli.bat`) | `opencli doctor` → Extension: connected |
-| **opencli-cookies** *(sous-module)* | Dump/export de cookies (HttpOnly inclus, Cookie-Editor) | `npm i -g github:art-qalam-fr/opencli-cookies` ou tarball — voir `opencli-cookies/TUTORIEL.md` | `opencli cookies dump --domain example.com` |
+| **opencli-cookies** *(sous-module)* | Dump/export de cookies (HttpOnly inclus, Cookie-Editor) | `npm i -g github:ArchNext/opencli-cookies` ou tarball — voir `opencli-cookies/TUTORIEL.md` | `opencli cookies dump --domain example.com` |
 
 > ⚠️ OpenCLI agit sur la session authentifiée — valeurs de cookies masquées
 > par défaut, `--reveal` explicite. Jamais d'export commité.

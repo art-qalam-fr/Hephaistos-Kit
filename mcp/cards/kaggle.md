@@ -6,7 +6,7 @@
 |---|---|
 | kind | `submodule` |
 | tier | `standard` |
-| repo | `art-qalam-fr/kaggle-mcp` |
+| repo | `ArchNext/kaggle-mcp` |
 | build | `uv sync` |
 
 **Notes** :

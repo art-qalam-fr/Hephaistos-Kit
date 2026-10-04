@@ -190,7 +190,18 @@ def _resolve_mcp_path(server_name: str, config_key: str, env_var: str, relative_
             return str(PROJECT_ROOT / config_path[2:])
         return config_path
     
-    # 3. Fallback relatif au projet (portable)
+    # 3. Emplacements d'installation connus (servers partagés du workspace)
+    servers_root = os.environ.get("MCP_SERVERS_ROOT", r"C:\Program Files\servers")
+    known = [
+        Path(servers_root) / server_name / "dist" / "index.js",
+        Path(servers_root) / f"{server_name}-mcp-server" / "dist" / "index.js",
+        Path(servers_root) / f"{server_name}-mcp-server" / "build" / "index.js",
+    ]
+    for candidate in known:
+        if candidate.exists():
+            return str(candidate)
+
+    # 4. Fallback relatif au projet (portable)
     return str(PROJECT_ROOT / relative_fallback)
 
 

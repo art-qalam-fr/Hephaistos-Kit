@@ -1,5 +1,5 @@
 # REGISTRE INFRASTRUCTURE — source de vérité
-Dernière vérification : 2026-10-02. Mettre à jour à chaque changement d'agent/provider/MCP.
+Dernière vérification : 2026-10-04. Mettre à jour à chaque changement d'agent/provider/MCP.
 
 ## Agent exécutant par défaut
 
@@ -10,7 +10,7 @@ Toute délégation sans précision d'agent va à cet agent. Pour changer le déf
 
 | Agent | Type | Skills | Commande | Quota |
 |---|---|---|---|---|
-| `agy` | CLI Antigravity | tous (`*`) | `agy.exe --print "{msg}"` | Abonnement — **toujours dispo**, modèles Gemini/Claude via `--model` |
+| `agy` | CLI Antigravity | tous (`*`) | `agy.exe --dangerously-skip-permissions --print="{msg}" --print-timeout 600s` | Abonnement — **toujours dispo**, modèles Gemini/Claude via `--model` |
 | `kilo` | KiloCode CLI | code, refactor, review, test | `kilo.exe run "{msg}" -m "{model}"` | Free/auto-free |
 | `hermes` | Hermes CLI | code, debug, review, explore, docs, test | `hermes -z "{msg}"` | Config providers free |
 | `devin` | Agent principal | architecture, orchestration | — | Agent IDE principal |
@@ -37,10 +37,14 @@ Outils : `create_task` `update_task` `get_next_task` `register_agent` `update_ag
 
 ## MCP actifs (Devin)
 
-agentmemory, filesystem, qdrant, sequentialthinking, sqlite-node, zvec, orchestrator, model-discovery, kaggle, colab-mcp, notebooks, beacon + `mcp-mux` (partagé multi-clients).
+agentmemory, filesystem, qdrant, sequentialthinking, sqlite-node, zvec, orchestrator, model-discovery, kaggle, colab-mcp, notebooks, beacon, **nim-router** + `mcp-mux` (partagé multi-clients).
+
+- `nim-router` : serveur autonome, package `nim-router-mcp` (sous-module `mcp/servers/nim-router-mcp` du kit : `nim_mcp_server.py` + `router.py` + `registre-modeles.json`). **Enregistré aux deux endroits** (même chemin absolu, synchronisés) : `%APPDATA%/devin/mcp_config.json` (serveur direct Devin, outils `nim_*` natifs) et `~/.config/mcp-mux/mcp-mux.json` (mux multi-clients, outils `mcp-mux.nim-router__nim_*` via mcporter). En cas de `Failed to connect/initialize` : vérifier le chemin dans les DEUX fichiers — ils se modifient indépendamment.
+- `agy.exe` : `%LOCALAPPDATA%\agy\bin` est dans le **PATH utilisateur** (persistant). Un shell déjà ouvert conserve l'ancien PATH → rouvrir un shell, ou `export PATH="$PATH:$LOCALAPPDATA/agy/bin"` (bash) / `$env:Path += ";$env:LOCALAPPDATA\agy\bin"` (PowerShell). Ne jamais créer d'alias ou de shim.
 
 ## Règles d'usage
 
+0. « **Sous-agents** » = les CLI agents externes (`agy`, `kilo`, `hermes`) délégués via `orchestrator.dispatch_task` / `acp-dispatch.mjs` / appel direct — distincts des *sub-agents* internes à l'IDE.
 1. Toute délégation → `orchestrator.dispatch_task`, jamais de prompt CLI à la main.
 2. `suggest_agent` en cas de doute sur le bon agent.
 3. Modèle précis souhaité → `model_prefs` de l'agent via `update_agent`.

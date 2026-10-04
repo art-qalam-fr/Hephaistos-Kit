@@ -1,12 +1,12 @@
 # MCP `qdrant`
 
-**Rôle** : Recherche vectorielle code/docs (768D projet + 1536D gÃ©nÃ©rique)
+**Rôle** : Recherche vectorielle code/docs (768D projet + 2048D gÃ©nÃ©rique)
 
 | | |
 |---|---|
 | kind | `submodule` |
 | tier | `standard` |
-| repo | `art-qalam-fr/qdrant-mcp-server` |
+| repo | `ArchNext/qdrant-mcp-server` |
 | build | `npm install && npm run build` |
 
 **Env** :

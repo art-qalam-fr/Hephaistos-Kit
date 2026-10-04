@@ -6,7 +6,7 @@
 |---|---|
 | kind | `submodule` |
 | tier | `personal` |
-| repo | `art-qalam-fr/nim-router-mcp` |
+| repo | `ArchNext/nim-router-mcp` |
 | build | `uv venv && uv pip install mcp` |
 
 **Env** :

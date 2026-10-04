@@ -81,13 +81,17 @@ if (Test-Path $launchersSrc) {
 }
 
 # --- 4. Resolution des placeholders ---
+$script:NpmGlobal = $null
 function Resolve-Value([string]$v) {
   $agentRepo = '<AGENTMEMORY_REPO>'
   if ($envVars['AGENTMEMORY_REPO']) { $agentRepo = $envVars['AGENTMEMORY_REPO'] }
+  if (-not $script:NpmGlobal) { $script:NpmGlobal = (npm prefix -g 2>$null) -replace '\\','/' ; if (-not $script:NpmGlobal) { $script:NpmGlobal = '<NPM_GLOBAL>' } }
   $r = $v -replace '\{INSTALL_ROOT\}', $InstallRoot `
           -replace '\{WORKSPACE\}', (Get-Location).Path `
           -replace '\{DEVIN_LAUNCHERS\}', "$env:USERPROFILE\.devin\launchers" `
-          -replace '\{AGENTMEMORY_REPO\}', $agentRepo
+          -replace '\{AGENTMEMORY_REPO\}', $agentRepo `
+          -replace '\{NPM_GLOBAL\}', $script:NpmGlobal `
+          -replace '\{USERPROFILE\}', ($env:USERPROFILE -replace '\\','/')
   return $r
 }
 
@@ -106,7 +110,7 @@ foreach ($s in $Manifest.servers) {
     if ($envVars[$e]) { $envBlock[$e] = $envVars[$e] } else { $envBlock[$e] = "`${$e}" }
   }
   if ($envBlock.Count) { $entry.env = $envBlock }
-  $missing = @($s.env_required | Where-Object { -not $envVars[$_] })
+  $missing = @(@($s.env_required) | Where-Object { $_ -and -not $envVars[$_] })
   if ($missing) { Write-Warning "$($s.name): env manquantes -> $($missing -join ', ') (remplir $EnvFile)" }
   $config.mcpServers[$s.name] = $entry
 }

@@ -329,10 +329,21 @@ def write_qdrant(infos):
                       {'vectors': {'size': DIMS, 'distance': 'Cosine'}}, method='PUT')
     except Exception as e:
         print('!! qdrant:', e); return
+    # notes utilisateur (dashboard) -> enrichissent l'embedding
+    notes = {}
+    try:
+        ndb = sqlite3.connect(REGISTRY_DB)
+        notes = dict(ndb.execute('SELECT project_id, note FROM project_notes '
+                                 "WHERE note != ''"))
+        ndb.close()
+    except Exception:
+        pass
     pts = []
     for i in infos:
+        note = notes.get(i.get('_pid'), '')
         txt = (f"{i['name']} — {i['description'][:200]}. Type: {i['ptype']}. "
-               f"Stack: {', '.join(i['languages'])}. État: {i['state']}. Chemin: {i['path']}")
+               f"Stack: {', '.join(i['languages'])}. État: {i['state']}. "
+               f"Chemin: {i['path']}" + (f". Note: {note[:300]}" if note else ''))
         try:
             r = http_json(EMBED_URL, {'model': EMBED_MODEL, 'input': txt,
                                       'input_type': 'passage', 'encoding_format': 'float'})

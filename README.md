@@ -12,7 +12,7 @@
   📖 <a href="docs/QUI-SOMMES-NOUS.md"><b>Qui sommes-nous</b></a> ·
   ☕ <a href="docs/QUI-SOMMES-NOUS.md#-soutenir-le-projet"><b>Offrir un café</b></a>
 
-  `github.com/art-qalam-fr/Hephaistos-Kit` · MIT
+  `github.com/ArchNext/Hephaistos-Kit` · MIT
 </div>
 
 ---
@@ -23,19 +23,33 @@ Hephaistos-Kit forge en une commande l'environnement complet d'un projet :
 
 | Pilier | Contenu | Destination |
 |---|---|---|
-| **Règles** | `global_rules.md` (délégation agents, OpenCLI/puppeteer, uv, mémoire unifiée, sécurité) | `.agent/rules/` |
-| **Agents** | Définitions + triggers de routage auto | `.agent/agents/` |
-| **Skills** | ~45 skills métier (+ `hephaistos-kit` auto-descriptive, `orchestrator`) | `.agent/skills/` |
-| **Workflows** | Slash-commands (`/plan`, `/debug`…) | `.agent/workflows/` |
-| **Scripts** | `run_chrome_opencli.bat`, `beacon-sync.ps1`, `ingest-workspace.ps1`… | `.agent/scripts/` |
+| **Règles** | `global_rules.md` (délégation sous-agents, OpenCLI/puppeteer, uv, mémoire unifiée, sécurité) | `.agent/rules/` |
+| **Agents** | 21 définitions + triggers de routage auto | `.agent/agents/` |
+| **Skills** | 40 skills métier (+ `hephaistos-kit` auto-descriptive, `orchestrator`) | `.agent/skills/` |
+| **Workflows** | 12 slash-commands (`/plan`, `/debug`…) | `.agent/workflows/` |
+| **Scripts** | `beacon-sync.ps1`, `ingest-workspace.ps1`, `mass-inject.py`… | `.agent/scripts/` |
 | **Registre** | `REGISTRY.md` — agents/providers canoniques + agent par défaut | `.agent/` |
-| **MCP** | Stack complète : 18 serveurs, manifest, installateur, sous-modules | `mcp/` |
-| **CLIs** | CLIs recommandés (agents, OpenCLI + adaptateur cookies) + protocole ACP | `cli/` |
+| **MCP** | Stack complète : 19 serveurs, manifest, installateur, sous-modules | `mcp/` |
+| **CLIs** | CLIs recommandés (sous-agents, OpenCLI + adaptateur cookies) + protocole ACP | `cli/` |
 | **IDE** | Configs VS Code/MCP partagées | `.vscode/` |
+
+### Ce que le kit met à disposition
+
+- **Délégation par sous-agents** : CLIs externes (`agy`, `hermes`, `kilo`)
+  enregistrés dans l'orchestrateur — dispatch de tâches, suivi, retour de
+  résultats (procédure éprouvée, voir `cli/ACP.md`)
+- **Mémoire unifiée** : Qdrant (recherche vectorielle 2048d), Zvec (graphes),
+  SQLite, `memory_mcp.db` — un espace mémoire partagé entre agents et projets
+- **Beacon → mémoire** : ingestion des traces de sessions (`beacon_ingest.py`
+  + `beacon-sync.ps1`) vers Qdrant + relations mémoire
+- **Orchestrateur** : tâches, agents, templates de prompt — SQLite, multi-clients
+- **Embeddings de référence** : **NVIDIA NIM** `nvidia/nemotron-3-embed-1b` (2048d)
+- **mcp-mux** : multiplexeur optionnel, partage les serveurs entre IDE/CLIs
 
 ## Installation du kit dans un projet
 
 > 📖 **Guide complet pas à pas** : [TUTORIEL-INSTALLATION.md](TUTORIEL-INSTALLATION.md)
+> ⚡ Version courte : [INSTALL.md](INSTALL.md)
 
 ```bash
 # Dans le dossier du projet cible
@@ -59,22 +73,23 @@ node bin/hephaistos-kit.js init --path <projet>
 
 ## Stack MCP — `mcp/`
 
-18 serveurs MCP documentés et reproductibles :
+19 serveurs MCP documentés et reproductibles :
 
 ```powershell
 # Cloner AVEC les sous-modules (chaque MCP = son repo épinglé)
-git clone --recurse-submodules https://github.com/art-qalam-fr/Hephaistos-Kit
+git clone --recurse-submodules https://github.com/ArchNext/Hephaistos-Kit
 cd Hephaistos-Kit
 
 # Installer : clone/build les serveurs + écrit la config de l'IDE
-.\mcp\install.ps1 -Ide devin          # devin | cursor | devin | kilocode | antigravity | trae
+.\mcp\install.ps1 -Ide devin          # devin | cursor | kilocode | antigravity | trae
 .\mcp\install.ps1 -Ide cursor -Tier standard -SkipBuild   # options
 ```
 
-- `manifest.json` — inventaire : kind (`submodule`/`npx`/`url`/`binary`/`pip`/`launcher`), tier (`standard`/`personal`), env requis
+- `manifest.json` — inventaire : kind (`submodule`/`npm`/`npx`/`url`/`binary`/`pip`/`launcher`), tier (`standard`/`personal`), env requis
 - `servers/` — 11 sous-modules git (filesystem, orchestrator, qdrant, zvec, sqlite, sequentialthinking, kaggle, google-drive, agentMemory, nim-router, model-discovery)
 - `cards/` — fiche par serveur (rôle, env, pièges)
 - `install.ps1` — résolution `${VAR}`, backup `.bak` de la config existante, `-DryRun`
+- `mcp-mux.config.template.json` — config du multiplexeur (optionnel)
 
 ### Secrets
 
@@ -90,14 +105,15 @@ AGENT_DB_ROOT=...
 ## CLIs — `cli/`
 
 Les outils en ligne de commande préconisés (chacun s'installe séparément) :
-agents de délégation (`agy`, `hermes`, `kilo`), **OpenCLI** (pilotage du
+sous-agents de délégation (`agy`, `hermes`, `kilo`), **OpenCLI** (pilotage du
 Chrome réel) + l'adaptateur maison **opencli-cookies** (sous-module),
 `gh`, `uv`… → [cli/README.md](cli/README.md). Protocole **ACP** de dispatch
 d'agents : [cli/ACP.md](cli/ACP.md) (client `.agent/devin/scripts/acp-dispatch.mjs`).
 
 ## Règles livrées dans le template
 
-- **Délégation agents** : agents CLI externes configurables (agy, hermes…), procédure éprouvée
+- **Délégation sous-agents** : CLIs externes configurables (agy, hermes, kilo),
+  procédure éprouvée — distincts des sub-agents internes de l'IDE
 - **Navigateur** : OpenCLI pour le Chrome de l'utilisateur ; Puppeteer MCP en bac à sable
 - **Python** : `uv` standard (`uv sync` / `uv run` / `uv add`, `uv.lock` committé)
 - **Mémoire unifiée** : `AGENT_DB_ROOT/current_workspace/`, sourcing avant tâche
@@ -110,10 +126,10 @@ Hephaistos-Kit/
 ├── .agent/          # template injecté (rules, agents, skills, workflows, scripts)
 ├── .vscode/         # configs IDE injectées
 ├── bin/hephaistos-kit.js   # CLI init/update
-├── mcp/             # stack MCP (manifest, install.ps1, cards, servers/*)
+├── mcp/             # stack MCP (manifest, install.ps1, cards, servers/*, template mux)
 ├── cli/             # CLIs recommandés + ACP + submodule opencli-cookies
 ├── logo/            # identité visuelle
-└── INSTALL.md / MANIFEST.md / CHANGELOG.md
+└── INSTALL.md / TUTORIEL-INSTALLATION.md / MANIFEST.md / CHANGELOG.md
 ```
 
 ## Qui sommes-nous

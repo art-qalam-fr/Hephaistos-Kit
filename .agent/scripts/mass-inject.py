@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Injection massive .agent/ + .vscode/ Hephaistos-Kit -> tous les projets F:\\Promgramation-teste.
+"""Injection massive .agent/ + .vscode/ Hephaistos-Kit -> tous les projets de la racine dev.
 
 Strategie :
 - Dirs TEMPLATE (mirror) : agents, docs, hermes, devin, scripts, workflows,
@@ -13,8 +13,14 @@ import os, json, shutil, sys, io
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
-KIT = r'F:\Promgramation-teste\Hephaistos-Kit'
-ROOT = r'F:\Promgramation-teste'
+# --dry-run : simule tout l'inventaire sans écrire ni supprimer quoi que
+# ce soit (audit avant propagation réelle — rapport identique)
+DRY = '--dry-run' in sys.argv
+
+# KIT = dossier racine du kit (3 niveaux au-dessus de ce script : scripts -> .agent -> kit)
+# ROOT = dossier parent du kit = racine des projets. Surcharge possible via env.
+KIT = os.environ.get('HEPHAISTOS_KIT') or os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT = os.environ.get('DEV_ROOT') or os.path.dirname(KIT)
 SRC_AGENT = os.path.join(KIT, '.agent')
 SRC_VSCODE = os.path.join(KIT, '.vscode')
 
@@ -62,6 +68,8 @@ def is_project(d):
     return False
 
 def copy_file(src, dst):
+    if DRY:
+        return
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     shutil.copy2(src, dst)
 
@@ -90,7 +98,9 @@ def mirror_dir(src, dst, stats):
                     continue
                 # knowledge/decisions geres en merge -> ici seulement mirror dirs
                 try:
-                    os.remove(os.path.join(base, fn)); stats['stale_removed'] += 1
+                    if not DRY:
+                        os.remove(os.path.join(base, fn))
+                    stats['stale_removed'] += 1
                 except OSError:
                     pass
 
@@ -110,7 +120,8 @@ def inject_vscode(proj, stats):
     dst_dir = os.path.join(proj, '.vscode')
     tasks_src = os.path.join(SRC_VSCODE, 'tasks.json')
     set_src = os.path.join(SRC_VSCODE, 'settings.json')
-    os.makedirs(dst_dir, exist_ok=True)
+    if not DRY:
+        os.makedirs(dst_dir, exist_ok=True)
     # settings : merge cles (existant gagne)
     ds = os.path.join(dst_dir, 'settings.json')
     try:
@@ -118,11 +129,14 @@ def inject_vscode(proj, stats):
         add = json.load(open(set_src, encoding='utf-8'))
         merged = {**add, **cur}
         if merged != cur:
-            json.dump(merged, open(ds, 'w', encoding='utf-8'), indent=4)
+            if not DRY:
+                json.dump(merged, open(ds, 'w', encoding='utf-8'), indent=4)
             stats['vscode'] += 1
     except Exception:
         if not os.path.exists(ds):
-            shutil.copy2(set_src, ds); stats['vscode'] += 1
+            if not DRY:
+                shutil.copy2(set_src, ds)
+            stats['vscode'] += 1
     # tasks : ajoute la tache folderOpen si absente
     dt = os.path.join(dst_dir, 'tasks.json')
     try:
@@ -131,11 +145,14 @@ def inject_vscode(proj, stats):
         if not has:
             kit_task = json.load(open(tasks_src, encoding='utf-8'))['tasks'][0]
             cur.setdefault('tasks', []).append(kit_task)
-            json.dump(cur, open(dt, 'w', encoding='utf-8'), indent=4)
+            if not DRY:
+                json.dump(cur, open(dt, 'w', encoding='utf-8'), indent=4)
             stats['vscode'] += 1
     except Exception:
         if not os.path.exists(dt):
-            shutil.copy2(tasks_src, dt); stats['vscode'] += 1
+            if not DRY:
+                shutil.copy2(tasks_src, dt)
+            stats['vscode'] += 1
 
 def inject(proj):
     stats = {'written': 0, 'stale_removed': 0, 'vscode': 0}
@@ -154,8 +171,9 @@ def inject(proj):
         if os.path.isdir(sd):
             merge_dir(sd, os.path.join(da, d), stats)
     # dirs locaux attendus par le systeme
-    for d in ['knowledge/decisions', 'logs', 'memory']:
-        os.makedirs(os.path.join(da, d), exist_ok=True)
+    if not DRY:
+        for d in ['knowledge/decisions', 'logs', 'memory']:
+            os.makedirs(os.path.join(da, d), exist_ok=True)
     inject_vscode(proj, stats)
     return stats
 
@@ -176,7 +194,9 @@ for name in sorted(os.listdir(ROOT)):
     except Exception as e:
         results[name] = f'ERREUR: {e}'
 
-print('\n================= RAPPORT INJECTION =================')
+print(('\n================= RAPPORT INJECTION'
+       + (' (DRY-RUN — rien écrit) =================' if DRY
+          else ' =================')))
 ok = [k for k, v in results.items() if isinstance(v, dict)]
 err = [(k, v) for k, v in results.items() if not isinstance(v, dict)]
 print(f'\nINJECTES : {len(ok)}')

@@ -6,7 +6,7 @@
 |---|---|
 | kind | `submodule` |
 | tier | `standard` |
-| repo | `art-qalam-fr/orchestrator-server` |
+| repo | `ArchNext/orchestrator-server` |
 | build | `npm install && npm run build` |
 
 **Env** :

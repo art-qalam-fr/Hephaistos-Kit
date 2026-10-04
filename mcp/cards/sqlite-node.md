@@ -6,7 +6,7 @@
 |---|---|
 | kind | `submodule` |
 | tier | `standard` |
-| repo | `art-qalam-fr/mcp-quick-sqlite3` |
+| repo | `ArchNext/mcp-quick-sqlite3` |
 | build | `npm install && npm run build` |
 
 **Notes** :

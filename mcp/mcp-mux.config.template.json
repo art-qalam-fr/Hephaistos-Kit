@@ -1,0 +1,176 @@
+{
+  "_comment": "Config broker mcp-mux - copier vers ~/.config/mcp-mux/mcp-mux.json et adapter {INSTALL_ROOT}, {WORKSPACE}. mode shared = processus unique partage entre clients.",
+  "servers": {
+    "sequentialthinking": {
+      "mode": "shared",
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/sequentialthinking/dist/index.js"
+      ],
+      "env": {
+        "DISABLE_DEBUG": "true",
+        "LOG_LEVEL": "error"
+      }
+    },
+    "sqlite-node": {
+      "mode": "shared",
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/mcp-quick-sqlite3/dist/index.js"
+      ]
+    },
+    "orchestrator": {
+      "mode": "shared",
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/orchestrator-server/build/index.js"
+      ]
+    },
+    "qdrant": {
+      "mode": "shared",
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/qdrant-mcp-server/build/index.js"
+      ]
+    },
+    "filesystem": {
+      "mode": "shared",
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/filesystem/dist/index.js",
+        "{WORKSPACE}"
+      ]
+    },
+    "model-discovery": {
+      "mode": "shared",
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/model-discovery-mcp/dist/index.js",
+        "stdio"
+      ]
+    },
+    "zvec": {
+      "mode": "shared",
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/Zvec/build/index.js"
+      ],
+      "env": {
+        "ZVEC_EMBEDDING_PROVIDER": "local",
+        "ZVEC_DENSE_MODEL": "Xenova/all-MiniLM-L6-v2",
+        "ZVEC_BACKEND": "hnsw",
+        "ZVEC_DATA_DIR": "{ZVEC_DATA_DIR}",
+        "LOG_LEVEL": "error",
+        "DISABLE_DEBUG": "true"
+      }
+    },
+    "nim-router": {
+      "mode": "shared",
+      "command": "python",
+      "args": [
+        "{INSTALL_ROOT}/nim-router-mcp/nim_mcp_server.py"
+      ],
+      "env": {
+        "NVIDIA_API_KEY": "${env:NVIDIA_API_KEY}"
+      }
+    },
+    "puppeteer": {
+      "mode": "shared",
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/puppeteer/dist/index.js"
+      ],
+      "env": {
+        "DISABLE_DEBUG": "true",
+        "LOG_LEVEL": "error"
+      }
+    },
+    "context7": {
+      "mode": "shared",
+      "command": "node",
+      "args": [
+        "{NPM_GLOBAL}/node_modules/@upstash/context7-mcp/dist/index.js"
+      ]
+    },
+    "memory": {
+      "mode": "shared",
+      "command": "node",
+      "args": [
+        "{NPM_GLOBAL}/node_modules/@modelcontextprotocol/server-memory/dist/index.js"
+      ],
+      "env": {
+        "MEMORY_FILE_PATH": "{USERPROFILE}/.config/devin/memory.json"
+      }
+    },
+    "memory-f": {
+      "mode": "shared",
+      "command": "node",
+      "args": [
+        "{MEMORY_F_ROOT}/memory/dist/index.js"
+      ],
+      "env": {
+        "LOG_LEVEL": "error",
+        "MEMORY_FILE_PATH": "{AGENT_DB_ROOT}/memory_mcp.db"
+      }
+    },
+    "postgres": {
+      "mode": "shared",
+      "lazy": true,
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/postgres-mcp/dist/index.js"
+      ],
+      "env": {
+        "CONNECTION_TIMEOUT": "30000",
+        "DISABLE_DEBUG": "true",
+        "IDLE_TIMEOUT": "60000",
+        "MAX_CONNECTIONS": "20",
+        "MIN_CONNECTIONS": "1",
+        "POSTGRES_DB": "n8n_workflows",
+        "POSTGRES_HOST": "localhost",
+        "POSTGRES_PORT": "5432",
+        "POSTGRES_USER": "postgres"
+      }
+    },
+    "google-drive": {
+      "mode": "shared",
+      "lazy": true,
+      "command": "node",
+      "args": [
+        "{INSTALL_ROOT}/google-drive/index.js"
+      ],
+      "env": {
+        "DISABLE_DEBUG": "true",
+        "LOG_LEVEL": "error"
+      }
+    },
+    "kaggle": {
+      "mode": "shared",
+      "lazy": true,
+      "command": "{INSTALL_ROOT}/kaggle-mcp/.venv/Scripts/kaggle-mcp-server.exe",
+      "args": [],
+      "env": {
+        "DISABLE_DEBUG": "true",
+        "LOG_LEVEL": "error"
+      }
+    },
+    "colab-mcp": {
+      "mode": "shared",
+      "lazy": true,
+      "command": "{INSTALL_ROOT}/google-colab-mcp/venv/Scripts/python.exe",
+      "args": [
+        "-m",
+        "mcp_colab_server.server"
+      ]
+    },
+    "beacon": {
+      "command": "{BEACON_EXE}",
+      "args": [
+        "mcp",
+        "serve"
+      ],
+      "lazy": true
+    }
+  },
+  "_comment_placeholders": "{INSTALL_ROOT}=C:/Program Files/servers · {NPM_GLOBAL}=npm prefix -g · {USERPROFILE} · {MEMORY_F_ROOT}=racine servers F: (personal) · {AGENT_DB_ROOT}=F:/Sqlite-DB · {BEACON_EXE}=C:/Program Files/Beacon/bin/beacon.exe"
+}

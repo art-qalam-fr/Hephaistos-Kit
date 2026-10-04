@@ -74,7 +74,7 @@ flowchart LR
 | Qdrant     | Qdrant MCP           | latest  |
 | Zvec       | Zvec MCP             | latest  |
 | Memory     | Memory MCP           | latest  |
-| Embeddings | Mistral API / Xenova | -       |
+| Embeddings | NVIDIA NIM (référence) | nvidia/nemotron-3-embed-1b, 2048d |
 
 ---
 
@@ -159,9 +159,9 @@ flowchart LR
   "embedding": {
     "qdrant": {
       "enabled": true,
-      "dimensions": 1536,
-      "provider": "mistral",
-      "model": "codestral-embed-2505",
+      "dimensions": 2048,
+      "provider": "nvidia",
+      "model": "nvidia/nemotron-3-embed-1b",
       "collections": {
         "code": "code_index",
         "doc": "doc_index",
@@ -1274,35 +1274,36 @@ class QdrantEmbedder:
 
     def __init__(self, config: Dict[str, Any]):
         self.config = config["embedding"]["qdrant"]
-        self.mistral_api_key = "<VOTRE_CLE_MISTRAL>"  # Depuis config
-        self.mistral_base_url = "https://api.mistral.ai/v1"
+        self.nvidia_api_key = "<VOTRE_CLE_NVIDIA>"  # NVIDIA_API_KEY, env user
+        self.nvidia_base_url = "https://integrate.api.nvidia.com/v1"
 
     async def embed(self, text: str) -> List[float]:
         """
-        Génère l'embedding via Mistral API
+        Génère l'embedding via NVIDIA NIM API (OpenAI-compatible)
 
         Args:
             text: Texte à embedder
 
         Returns:
-            Vecteur de 1536 dimensions
+            Vecteur de 2048 dimensions
         """
         response = requests.post(
-            f"{self.mistral_base_url}/embeddings",
+            f"{self.nvidia_base_url}/embeddings",
             headers={
-                "Authorization": f"Bearer {self.mistral_api_key}",
+                "Authorization": f"Bearer {self.nvidia_api_key}",
                 "Content-Type": "application/json"
             },
             json={
                 "model": self.config["model"],
-                "input": text
+                "input": text,
+                "input_type": "passage"
             }
         )
 
         if response.status_code == 200:
             return response.json()["data"][0]["embedding"]
         else:
-            raise Exception(f"Mistral API error: {response.status_code}")
+            raise Exception(f"NVIDIA API error: {response.status_code}")
 
     async def store(
         self,
@@ -1370,7 +1371,7 @@ class QdrantEmbedder:
 **Critères de validation**:
 
 - [ ] Classe QdrantEmbedder implémentée
-- [ ] Embedding Mistral fonctionnel
+- [ ] Embedding NVIDIA fonctionnel
 - [ ] Stockage dans Qdrant fonctionnel
 - [ ] Recherche dans Qdrant fonctionnelle
 - [ ] Tests d'intégration passent
@@ -2493,8 +2494,7 @@ Le cache utilise Redis avec TTL de 90 minutes.
 
 | Risque                   | Probabilité | Impact  | Mitigation                     |
 | ------------------------ | ----------- | ------- | ------------------------------ |
-| API Mistral indisponible | Moyenne     | Haute   | Fallback sur embeddings locaux |
-| Modèle Xenova lent       | Faible      | Moyenne | Pré-calculer les embeddings    |
+| API NVIDIA indisponible  | Moyenne     | Haute   | Fallback sur embeddings locaux |
 | Memory MCP saturation    | Faible      | Haute   | Nettoyage automatique          |
 | Chevauchement excessif   | Faible      | Moyenne | Ajuster overlap_percent        |
 | Tags redondants          | Moyenne     | Faible  | Déduplication automatique      |

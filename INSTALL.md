@@ -1,86 +1,57 @@
-# Hephaistos-Kit Installation Guide
+# Hephaistos-Kit — Installation rapide
 
-## Quick Install
+> 📖 Version détaillée pas à pas (clés API, dépannage, mcp-mux) :
+> **[TUTORIEL-INSTALLATION.md](TUTORIEL-INSTALLATION.md)**
 
-```bash
-npx @art-qalam-fr/hephaistos-kit init
+## Install express
+
+```powershell
+# 1. Cloner AVEC les sous-modules
+git clone --recurse-submodules https://github.com/ArchNext/Hephaistos-Kit.git
+cd Hephaistos-Kit
+
+# 2. Injecter .agent/ dans votre projet (depuis son dossier)
+node <chemin>\Hephaistos-Kit\bin\hephaistos-kit.js init
+#   ou : npm install -g .  puis  hephaistos-kit init
+
+# 3. Secrets dans ~/.hephaistos/env.local (jamais commité)
+#    NVIDIA_API_KEY=nvapi-...   <- build.nvidia.com (gratuit)
+#    AGENT_DB_ROOT=<chemin>     <- racine mémoire unifiée
+
+# 4. Stack MCP : build + config de l'IDE
+.\mcp\install.ps1 -Ide devin
 ```
 
-Or install globally:
+## Ce qui est injecté dans le projet
 
-```bash
-npm install -g @art-qalam-fr/hephaistos-kit
-hephaistos-kit init
-```
+| Composant | Contenu |
+|---|---|
+| `.agent/rules/` | `global_rules.md` — règles universelles |
+| `.agent/agents/` | 21 agents spécialisés + triggers de routage |
+| `.agent/skills/` | 40 skills métier |
+| `.agent/workflows/` | 12 workflows `/plan`, `/debug`, `/orchestrate`… |
+| `.agent/scripts/` | beacon-sync, ingestion workspace, mass-inject… |
+| `.agent/REGISTRY.md` | agents/providers canoniques |
+| `.vscode/` | configs IDE partagées |
 
-## What gets installed
+## Commandes du CLI
 
-The command installs the COMPLETE `.agent` folder containing:
+| Commande | Rôle |
+|---|---|
+| `hephaistos-kit init` | Injecte `.agent/` + `.vscode/` |
+| `hephaistos-kit init --dry-run` | Simulation sans écriture |
+| `hephaistos-kit init --path <dir>` | Cible explicite |
+| `hephaistos-kit update --force` | Réaligne sur le template (préserve `memory-database/` et `local_rules.md`) |
+| `hephaistos-kit status` | État de l'injection |
 
-### 🤖 Agents (20 specialized agents)
-- backend-specialist, code-archaeologist, database-architect
-- debugger, devops-engineer, documentation-writer
-- explorer-agent, frontend-specialist, game-developer
-- mobile-developer, orchestrator, penetration-tester
-- performance-optimizer, product-manager, product-owner
-- project-planner, qa-automation-engineer, security-auditor
-- seo-specialist, test-engineer
+## Stack MCP (19 serveurs)
 
-### 🛠️ Skills (35+ development skills)
-- api-patterns, app-builder, architecture
-- bash-linux, behavioral-modes, brainstorming
-- clean-code, code-review-checklist, database-design
-- deployment-procedures, documentation-templates
-- frontend-design, game-development, geo-fundamentals
-- i18n-localization, intelligent-routing, lint-and-validate
-- mcp-builder, mobile-design, nextjs-react-expert
-- nodejs-best-practices, parallel-agents, performance-profiling
-- plan-writing, powershell-windows, python-patterns
-- red-team-tactics, rust-pro, seo-fundamentals
-- server-management, systematic-debugging, tailwind-patterns
-- tdd-workflow, testing-patterns, vulnerability-scanner
-- web-design-guidelines, webapp-testing
+`mcp/install.ps1` clone, builde et génère la config IDE. Détail :
+**[mcp/README.md](mcp/README.md)** — manifest, cards par serveur, tiers
+`standard`/`personal`, multiplexeur optionnel `mcp-mux`.
 
-### 🔄 Workflows (11 automation workflows)
-- brainstorm, create, debug, deploy, enhance
-- orchestrate, plan, preview, status, test
-- ui-ux-pro-max
+## Sécurité
 
-### 🧠 Knowledge & Memory Systems
-- Architecture documentation
-- Decision records (ADRs)
-- Memory management policies
-- Knowledge base structure
-
-### ⚙️ VS Code Integration
-- Tasks configuration
-- Development environment settings
-
-## CLI Commands
-
-| Command         | Description                               |
-| --------------- | ----------------------------------------- |
-| `hephaistos-kit init`   | Install COMPLETE `.agent` folder into your project |
-| `hephaistos-kit update` | Update to the latest version              |
-| `hephaistos-kit status` | Check installation status                 |
-
-### Options
-
-```bash
-hephaistos-kit init --force        # Overwrite existing .agent folder
-hephaistos-kit init --path ./myapp # Install in specific directory
-hephaistos-kit init --quiet        # Suppress output (for CI/CD)
-hephaistos-kit init --dry-run      # Preview actions without executing
-hephaistos-kit init --include-package # Also copy package.json
-```
-
-## Complete Installation
-
-The installation includes **ALL** files and directories:
-- ✅ Complete .agent directory with all agents, skills, workflows
-- ✅ Complete .vscode directory with VS Code integration
-- ✅ Knowledge base and memory systems
-- ✅ Rules and configuration files
-- ✅ Scripts and automation tools
-
-**Nothing is excluded** - you get the full Hephaistos-Kit experience!
+- **Aucun secret** dans le repo — tout vit dans `~/.hephaistos/env.local`
+- `.env` toujours gitignoré ; les templates n'utilisent que des placeholders
+- Embeddings de référence : NVIDIA `nvidia/nemotron-3-embed-1b` (2048d)

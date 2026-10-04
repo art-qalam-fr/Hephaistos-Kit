@@ -1,4 +1,4 @@
-Param(
+﻿Param(
     [string]$ConfigPath = "",
     [switch]$DryRun = $false
 )

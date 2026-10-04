@@ -6,7 +6,7 @@
 |---|---|
 | kind | `submodule` |
 | tier | `personal` |
-| repo | `art-qalam-fr/google-drive-mcp` |
+| repo | `ArchNext/google-drive-mcp` |
 | build | `npm install` |
 
 ⚠️ **Setup** : Placer gcp-oauth.keys.json + .gdrive-server-credentials.json dans le dossier du serveur (jamais commitÃ©s â€” obtenus via get-refresh-token.ps1)
