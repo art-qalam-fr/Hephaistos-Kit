@@ -39,6 +39,6 @@
     "remark-gfm": "^4.0.1",
     "shiki": "^3.22.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^7"
   }
 }
